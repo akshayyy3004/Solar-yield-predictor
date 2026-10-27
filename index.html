@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solar Yield AI Dashboard</title>
+    <link rel="stylesheet" href="static/style.css">
+</head>
+
+<body>
+    <div class="dashboard-container">
+      
+        <div class="info-panel">
+            <h2>Model Training Insights</h2>
+            <p><strong>Models Tested:</strong> Random Forest, SVR, Gradient Boosting</p>
+            <p><strong>Winning Model:</strong> <span class="highlight">Gradient Boosting</span></p>
+            <p><strong>Model Accuracy (R²):</strong> 88.42%</p>
+            
+            <div class="graph-box">
+                <p>Actual vs Predicted Performance:</p>
+                <img src="static/model_proof.png" alt="Model Proof Graph" id="proof-graph">
+            </div>
+        </div>
+
+        <div class="action-panel">
+            <h2>Live Predictor</h2>
+            <p>Enter current weather parameters to test the model.</p>
+            
+            <form id="prediction-form">
+                <div class="input-group">
+                    <label>Ambient Temperature (°C)</label>
+                    <input type="number" id="ambient_temp" step="any" required placeholder="e.g. 25.5">
+                </div>
+                
+                <div class="input-group">
+                    <label>Module Temperature (°C)</label>
+                    <input type="number" id="module_temp" step="any" required placeholder="e.g. 40.2">
+                </div>
+                
+                <div class="input-group">
+                    <label>Irradiation (kW/m²)</label>
+                    <input type="number" id="irradiation" step="any" required placeholder="e.g. 0.85">
+                </div>
+                
+                <button type="submit">Predict Yield</button>
+            </form>
+
+            <div id="result-box" style="display: none;">
+                <h3>Predicted Power:</h3>
+                <h1 id="yield-result">0.00 kWh</h1>
+            </div>
+        </div>
+
+    </div>
+    <script src="static/script.js"></script>
+</body>
+</html>
