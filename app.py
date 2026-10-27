@@ -6,14 +6,12 @@ import datetime
 
 app = Flask(__name__)
 
-# Load model and scaler
 model = joblib.load('dataset/solar_model.pkl')
 scaler = joblib.load('dataset/scaler.pkl')
 
-# MongoDB Connection
 client = MongoClient('mongodb://localhost:27017/')
-db = client['solar_database']         # Creates/connects to 'solar_database'
-collection = db['yield_predictions']  # Creates/connects to 'yield_predictions' collection
+db = client['solar_database']         
+collection = db['yield_predictions'] 
 
 @app.route('/')
 def home():
@@ -37,7 +35,6 @@ def predict():
         scaled_input = scaler.transform(input_data)
         predicted_yield = round(float(model.predict(scaled_input)[0]), 2)
         
-        # Save log entry directly into MongoDB
         log_entry = {
             'ambient_temp': amb,
             'module_temp': mod,
@@ -54,6 +51,10 @@ def predict():
         
     except Exception as e:
         return jsonify({'status': 'error', 'message': str(e)})
+
+if __name__ == '__main__':
+    print("Starting Solar API with MongoDB...")
+    app.run(debug=True, port=5000)
 
 if __name__ == '__main__':
     print("Starting Solar API with MongoDB...")
