@@ -9,16 +9,30 @@
 
 <body>
     <div class="dashboard-container">
-      
+    
         <div class="info-panel">
             <h2>Model Training Insights</h2>
-            <p><strong>Models Tested:</strong> Random Forest, SVR, Gradient Boosting</p>
-            <p><strong>Winning Model:</strong> <span class="highlight">Gradient Boosting</span></p>
-            <p><strong>Model Accuracy (R²):</strong> 88.42%</p>
+            
+            <div class="input-group">
+                <label for="model-selector" style="color: #1abc9c;"><strong>Select AI Algorithm:</strong></label>
+                <select id="model-selector" style="width: 100%; padding: 10px; border-radius: 5px; margin-bottom: 15px;">
+                    <option value="gb">Gradient Boosting (Recommended)</option>
+                    <option value="rf">Random Forest</option>
+                    <option value="svr">Support Vector Regressor (SVR)</option>
+                </select>
+            </div>
+
+            <div class="metrics-box">
+                <p><strong>R² Accuracy:</strong> <span id="r2-score" class="highlight">88.42%</span></p>
+                <p><strong>Mean Absolute Error:</strong> <span id="mae-score" style="font-weight: bold; color: #e74c3c;">152.4 kWh</span></p>
+            </div>
             
             <div class="graph-box">
-                <p>Actual vs Predicted Performance:</p>
-                <img src="static/model_proof.png" alt="Model Proof Graph" id="proof-graph">
+                <p><strong>Actual vs Predicted Accuracy:</strong></p>
+                <img src="static/gb_scatter.png" alt="Scatter Plot" id="scatter-graph" style="width: 100%; border-radius: 4px; margin-bottom: 15px;">
+                
+                <p><strong>Training vs Validation Error (Learning Curve):</strong></p>
+                <img src="static/gb_learning_curve.png" alt="Learning Curve" id="learning-curve-graph" style="width: 100%; border-radius: 4px;">
             </div>
         </div>
 
