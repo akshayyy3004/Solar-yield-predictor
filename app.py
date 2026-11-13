@@ -6,12 +6,16 @@ import datetime
 
 app = Flask(__name__)
 
-model = joblib.load('dataset/solar_model.pkl')
+models = {
+    'gb': joblib.load('dataset/gb_model.pkl'),
+    'rf': joblib.load('dataset/rf_model.pkl'),
+    'svr': joblib.load('dataset/svr_model.pkl')
+}
 scaler = joblib.load('dataset/scaler.pkl')
 
 client = MongoClient('mongodb://localhost:27017/')
-db = client['solar_database']         
-collection = db['yield_predictions'] 
+db = client['solar_database']        
+collection = db['yield_predictions']  
 
 @app.route('/')
 def home():
@@ -26,6 +30,8 @@ def predict():
         mod = data['module_temperature']
         irr = data['irradiation']
         
+        chosen_model_name = data['model_type'] 
+        
         input_data = pd.DataFrame([{
             'AMBIENT_TEMPERATURE': amb,
             'MODULE_TEMPERATURE': mod,
@@ -33,12 +39,15 @@ def predict():
         }])
         
         scaled_input = scaler.transform(input_data)
-        predicted_yield = round(float(model.predict(scaled_input)[0]), 2)
+        
+        active_model = models[chosen_model_name]
+        predicted_yield = round(float(active_model.predict(scaled_input)[0]), 2)
         
         log_entry = {
             'ambient_temp': amb,
             'module_temp': mod,
             'irradiation': irr,
+            'model_used': chosen_model_name, 
             'predicted_yield_kwh': predicted_yield,
             'timestamp': datetime.datetime.now()
         }
@@ -55,7 +64,4 @@ def predict():
 if __name__ == '__main__':
     print("Starting Solar API with MongoDB...")
     app.run(debug=True, port=5000)
-
-if __name__ == '__main__':
-    print("Starting Solar API with MongoDB...")
-    app.run(debug=True, port=5000)
+    
